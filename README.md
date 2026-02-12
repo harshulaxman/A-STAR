@@ -1,9 +1,16 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name: Harsshitha lakshmanan     </h3>
+<h3>Register Number:  212223230075        </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
+
+
+
+
+
+
+
 
 ``````
 // A* Search Algorithm
@@ -117,3 +124,105 @@ G 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'E', 'D', 'G']
+
+
+Program:
+
+~~~
+
+from collections import defaultdict
+
+class Node:
+    def __init__(self, name, parent=None, g=0, h=0):
+        self.name = name
+        self.parent = parent
+        self.g = g
+        self.h = h
+        self.f = g + h
+
+def a_star(graph, heuristics, start, goal):
+    open_list = []
+    closed_list = []
+
+    start_node = Node(start, None, 0, heuristics[start])
+    open_list.append(start_node)
+
+    while open_list:
+        # Node with minimum f value
+        current = min(open_list, key=lambda x: x.f)
+        open_list.remove(current)
+        closed_list.append(current)
+
+        if current.name == goal:
+            path = []
+            while current:
+                path.append(current.name)
+                current = current.parent
+            return path[::-1]
+
+        for neighbor, cost in graph[current.name]:
+            g = current.g + cost
+            h = heuristics[neighbor]
+            f = g + h
+
+            # Skip if better node exists in OPEN
+            if any(n.name == neighbor and n.f <= f for n in open_list):
+                continue
+
+            # Skip if better node exists in CLOSED
+            if any(n.name == neighbor and n.f <= f for n in closed_list):
+                continue
+
+            open_list.append(Node(neighbor, current, g, h))
+
+    return None
+
+# -------- Driver Code --------
+graph = defaultdict(list)
+
+v, e = map(int, input().split())
+for _ in range(e):
+    u, v1, w = input().split()
+    graph[u].append((v1, int(w)))
+    graph[v1].append((u, int(w)))
+
+heuristics = {}
+for _ in range(len(graph)):
+    n, h = input().split()
+    heuristics[n] = int(h)
+
+start = list(heuristics.keys())[0]
+goal = min(heuristics, key=lambda x: heuristics[x])
+
+path = a_star(graph, heuristics, start, goal)
+print("Path found:", path)
+
+
+
+~~~
+
+
+
+
+
+
+
+
+Output:
+
+
+<img width="561" height="539" alt="image" src="https://github.com/user-attachments/assets/2e474f5d-8391-4719-8c08-35963cd491c6" />
+
+
+
+
+<img width="443" height="289" alt="image" src="https://github.com/user-attachments/assets/b8149101-6aad-4f9d-bf85-c579cf43a88e" />
+
+
+
+
+
+RESULT:
+Thus the given code is executed succesfully.
+
+
